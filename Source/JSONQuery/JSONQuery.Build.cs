@@ -1,18 +1,22 @@
 // Copyright 1998-2013 Epic Games, Inc. All Rights Reserved.
 using UnrealBuildTool;
 
-public class JSONQuery : ModuleRules
+namespace UnrealBuildTool.Rules
 {
-	public JSONQuery(TargetInfo Target)
+	public class JSONQuery : ModuleRules
 	{
-        PublicDependencyModuleNames.AddRange(
-			new string[] { 
-				"Core", 
-				"CoreUObject",
-				"Engine",
-				"HTTP",
-				"Json"
-			}
-		);
+        public JSONQuery(ReadOnlyTargetRules Target) : base(Target)
+		{
+			bEnforceIWYU = false;
+			PrivateDependencyModuleNames.AddRange(
+				new string[] {
+					"Core", 
+					"CoreUObject",
+					"Engine",
+					"HTTP",
+					"Json"
+                }
+			);
+		}
 	}
 }
