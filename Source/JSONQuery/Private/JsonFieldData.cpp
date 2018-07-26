@@ -1,5 +1,9 @@
 // Copyright 1998-2013 Epic Games, Inc. All Rights Reserved.
-#include "JSONQueryPrivatePCH.h"
+#include "JSONQueryModule.h"
+#include "JsonFieldData.h"
+
+//#include "Map.h"
+#include "Engine/Engine.h"
 
 //////////////////////////////////////////////////////////////////////////
 // UJsonFieldData
