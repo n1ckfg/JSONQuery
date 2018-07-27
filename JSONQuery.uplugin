@@ -9,7 +9,8 @@
 	"Description" : "Exposes nodes to Blueprint that allow you to easily post and request pages on webservers through the JSON protocol.",
 	"Category" : "Web",
 	"EnabledByDefault" : true,
-	
+	"CanContainContent" : true,
+
 	"Modules" :
 	[
 		{
