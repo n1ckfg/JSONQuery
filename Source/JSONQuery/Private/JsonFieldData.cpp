@@ -39,7 +39,7 @@ UJsonFieldData* UJsonFieldData::GetRequest(UObject* WorldContextObject, const FS
 UJsonFieldData* UJsonFieldData::Create(UObject* WorldContextObject)
 {
 	// Get the world object from the context
-	UWorld* World = GEngine->GetWorldFromContextObject(WorldContextObject);
+	UWorld* World = GEngine->GetWorldFromContextObjectChecked(WorldContextObject);
 
 	// Construct the object and return it
 	UJsonFieldData* fieldData = NewObject<UJsonFieldData>();
@@ -617,7 +617,7 @@ bool UJsonFieldData::FromString(const FString& dataString)
 bool UJsonFieldData::FromFile(const FString& FilePath) {
 
 	FString Result;
-	FString FullJsonPath = FPaths::ConvertRelativePathToFull(FPaths::GameContentDir() / FilePath);
+	FString FullJsonPath = FPaths::ConvertRelativePathToFull(FPaths::ProjectContentDir() / FilePath);
 	if (!FFileHelper::LoadFileToString(Result, *FullJsonPath))
 	{
 		UE_LOG(LogJson, Error, TEXT("Can't load json data from %s"), *FilePath);
@@ -687,7 +687,7 @@ bool UJsonFieldData::SaveStringTextToFile(FString SaveDirectory, FString FileNam
 	}
 	else
 	{
-		SaveDirectory = FPaths::GameDir() + "/" + FileName;
+		SaveDirectory = FPaths::ProjectDir() + "/" + FileName;
 	}
 
 
