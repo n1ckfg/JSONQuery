@@ -1,31 +1,27 @@
 // Copyright 1998-2013 Epic Games, Inc. All Rights Reserved.
-#include "JSONQueryModule.h"
-#include "JsonFieldData.h"
-
-//#include "Map.h"
-#include "Engine/Engine.h"
+#include "JSONFieldData.h"
 
 //////////////////////////////////////////////////////////////////////////
-// UJsonFieldData
+// UJSONFieldData
 
 /**
 * Constructor
 */
-UJsonFieldData::UJsonFieldData()
+UJSONFieldData::UJSONFieldData()
 {
 	Reset();
 }
 
-UJsonFieldData* UJsonFieldData::GetRequest(UObject* WorldContextObject, const FString &url)
+UJSONFieldData* UJSONFieldData::GetRequest(UObject* WorldContextObject, const FString &url)
 {
 	// Create new page data for the response
-	UJsonFieldData* dataObj = Create(WorldContextObject);
+	UJSONFieldData* dataObj = Create(WorldContextObject);
 
 	// Create the HTTP request
 	TSharedRef< IHttpRequest > HttpRequest = FHttpModule::Get().CreateRequest();
 	HttpRequest->SetVerb("GET");
 	HttpRequest->SetURL(CreateURL(url));
-	HttpRequest->OnProcessRequestComplete().BindUObject(dataObj, &UJsonFieldData::OnReady);
+	HttpRequest->OnProcessRequestComplete().BindUObject(dataObj, &UJSONFieldData::OnReady);
 	
 	dataObj->AddToRoot();
 
@@ -36,18 +32,18 @@ UJsonFieldData* UJsonFieldData::GetRequest(UObject* WorldContextObject, const FS
 	return dataObj;
 }
 
-UJsonFieldData* UJsonFieldData::Create(UObject* WorldContextObject)
+UJSONFieldData* UJSONFieldData::Create(UObject* WorldContextObject)
 {
 	// Get the world object from the context
 	UWorld* World = GEngine->GetWorldFromContextObjectChecked(WorldContextObject);
 
 	// Construct the object and return it
-	UJsonFieldData* fieldData = NewObject<UJsonFieldData>();
+	UJSONFieldData* fieldData = NewObject<UJSONFieldData>();
 	fieldData->contextObject = WorldContextObject;
 	return fieldData;
 }
 
-FString UJsonFieldData::CreateURL(FString inputURL)
+FString UJSONFieldData::CreateURL(FString inputURL)
 {
 	if (!inputURL.StartsWith("http"))
 	{
@@ -57,7 +53,7 @@ FString UJsonFieldData::CreateURL(FString inputURL)
 	return inputURL;
 }
 
-void UJsonFieldData::WriteObject(TSharedRef<TJsonWriter<TCHAR>> writer, FString key, FJsonValue* value)
+void UJSONFieldData::WriteObject(TSharedRef<TJsonWriter<TCHAR>> writer, FString key, FJsonValue* value)
 {
 	if (value->Type == EJson::Null)
 	{
@@ -145,7 +141,7 @@ void UJsonFieldData::WriteObject(TSharedRef<TJsonWriter<TCHAR>> writer, FString 
 	}
 }
 
-void UJsonFieldData::PostRequest(UObject* WorldContextObject, const FString &url)
+void UJSONFieldData::PostRequest(UObject* WorldContextObject, const FString &url)
 {
 	FString outStr = ToString();
 
@@ -159,14 +155,14 @@ void UJsonFieldData::PostRequest(UObject* WorldContextObject, const FString &url
 	HttpRequest->SetURL(CreateURL(url));
 	HttpRequest->SetHeader("Content-Type", "application/json");
 	HttpRequest->SetContentAsString(outStr);
-	HttpRequest->OnProcessRequestComplete().BindUObject(this, &UJsonFieldData::OnReady);
+	HttpRequest->OnProcessRequestComplete().BindUObject(this, &UJSONFieldData::OnReady);
 
 	AddToRoot();
 	// Execute the request
 	HttpRequest->ProcessRequest();
 }
 
-void UJsonFieldData::PostRequestWithFile(FString FilePath, const FString &Url)
+void UJSONFieldData::PostRequestWithFile(FString FilePath, const FString &Url)
 {
 	FPaths::NormalizeFilename(FilePath);
 	TArray<uint8> RawFileData;
@@ -210,7 +206,7 @@ void UJsonFieldData::PostRequestWithFile(FString FilePath, const FString &Url)
 	HttpRequest->SetHeader("Content-Type", FString("multipart/form-data; boundary=") + Boundary);
 	HttpRequest->SetURL(CreateURL(Url));
 	HttpRequest->SetContent(Buffer);
-	HttpRequest->OnProcessRequestComplete().BindUObject(this, &UJsonFieldData::OnReady);
+	HttpRequest->OnProcessRequestComplete().BindUObject(this, &UJSONFieldData::OnReady);
 
 	// Log the post data for the user (OPTIONAL)
 	UE_LOG(LogTemp, Warning, TEXT("Post data: %s"), *JSONStr);
@@ -220,43 +216,43 @@ void UJsonFieldData::PostRequestWithFile(FString FilePath, const FString &Url)
 	HttpRequest->ProcessRequest();
 }
 
-UJsonFieldData* UJsonFieldData::SetString(const FString& key, const FString& value)
+UJSONFieldData* UJSONFieldData::SetString(const FString& key, const FString& value)
 {
 	Data->SetStringField(*key,*value);
 	return this;
 }
 
-UJsonFieldData* UJsonFieldData::SetBoolean(const FString& key, const bool value)
+UJSONFieldData* UJSONFieldData::SetBoolean(const FString& key, const bool value)
 {
 	Data->SetBoolField(*key, value);
 	return this;
 }
 
-UJsonFieldData* UJsonFieldData::SetFloat(const FString& key, const float value)
+UJSONFieldData* UJSONFieldData::SetFloat(const FString& key, const float value)
 {
 	Data->SetNumberField(*key, static_cast<double>(value));
 	return this;
 }
 
-UJsonFieldData* UJsonFieldData::SetInt(const FString& key, const int32 value)
+UJSONFieldData* UJSONFieldData::SetInt(const FString& key, const int32 value)
 {
 	Data->SetNumberField(*key, static_cast<double>(value));
 	return this;
 }
 
-UJsonFieldData* UJsonFieldData::SetNull(const FString& key)
+UJSONFieldData* UJSONFieldData::SetNull(const FString& key)
 {
 	Data->SetObjectField(*key, NULL);
 	return this;
 }
 
-UJsonFieldData* UJsonFieldData::SetObject(const FString& key, const UJsonFieldData* objectData)
+UJSONFieldData* UJSONFieldData::SetObject(const FString& key, const UJSONFieldData* objectData)
 {
 	Data->SetObjectField(*key, objectData->Data);
 	return this;
 }
 
-UJsonFieldData* UJsonFieldData::SetObjectArray(const FString& key, const TArray<UJsonFieldData*> objectData)
+UJSONFieldData* UJSONFieldData::SetObjectArray(const FString& key, const TArray<UJSONFieldData*> objectData)
 {
 	TArray<TSharedPtr<FJsonValue>> *dataArray = new TArray<TSharedPtr<FJsonValue>>();
 
@@ -269,7 +265,7 @@ UJsonFieldData* UJsonFieldData::SetObjectArray(const FString& key, const TArray<
 	return this;
 }
 
-UJsonFieldData* UJsonFieldData::SetStringArray(const FString& key, const TArray<FString> stringData)
+UJSONFieldData* UJSONFieldData::SetStringArray(const FString& key, const TArray<FString> stringData)
 {
 	TArray<TSharedPtr<FJsonValue>> *dataArray = new TArray<TSharedPtr<FJsonValue>>();
 
@@ -283,7 +279,7 @@ UJsonFieldData* UJsonFieldData::SetStringArray(const FString& key, const TArray<
 	return this;
 }
 
-UJsonFieldData* UJsonFieldData::SetBoolArray(const FString& key, const TArray<bool> data)
+UJSONFieldData* UJSONFieldData::SetBoolArray(const FString& key, const TArray<bool> data)
 {
 	TArray<TSharedPtr<FJsonValue>> *dataArray = new TArray<TSharedPtr<FJsonValue>>();
 
@@ -297,7 +293,7 @@ UJsonFieldData* UJsonFieldData::SetBoolArray(const FString& key, const TArray<bo
 	return this;
 }
 
-UJsonFieldData* UJsonFieldData::SetFloatArray(const FString& key, const TArray<float> data)
+UJSONFieldData* UJSONFieldData::SetFloatArray(const FString& key, const TArray<float> data)
 {
 	TArray<TSharedPtr<FJsonValue>> *dataArray = new TArray<TSharedPtr<FJsonValue>>();
 
@@ -311,7 +307,7 @@ UJsonFieldData* UJsonFieldData::SetFloatArray(const FString& key, const TArray<f
 	return this;
 }
 
-UJsonFieldData* UJsonFieldData::SetIntArray(const FString& key, const TArray<int32> data)
+UJSONFieldData* UJSONFieldData::SetIntArray(const FString& key, const TArray<int32> data)
 {
 	TArray<TSharedPtr<FJsonValue>> *dataArray = new TArray<TSharedPtr<FJsonValue>>();
 
@@ -325,7 +321,7 @@ UJsonFieldData* UJsonFieldData::SetIntArray(const FString& key, const TArray<int
 	return this;
 }
 
-UJsonFieldData* UJsonFieldData::SetNullArray(const FString& key, const int32& length)
+UJSONFieldData* UJSONFieldData::SetNullArray(const FString& key, const int32& length)
 {
 	TArray<TSharedPtr<FJsonValue>> *dataArray = new TArray<TSharedPtr<FJsonValue>>();
 
@@ -339,9 +335,9 @@ UJsonFieldData* UJsonFieldData::SetNullArray(const FString& key, const int32& le
 	return this;
 }
 
-UJsonFieldData* UJsonFieldData::GetObject(const FString& key, bool& success)
+UJSONFieldData* UJSONFieldData::GetObject(const FString& key, bool& success)
 {
-	UJsonFieldData* fieldObj = NULL;
+	UJSONFieldData* fieldObj = NULL;
 
 	// Try to get the object field from the data
 	const TSharedPtr<FJsonObject> *outPtr;
@@ -354,7 +350,7 @@ UJsonFieldData* UJsonFieldData::GetObject(const FString& key, bool& success)
 	}
 
 	// Create a new field data object and assign the data
-	fieldObj = UJsonFieldData::Create(contextObject);
+	fieldObj = UJSONFieldData::Create(contextObject);
 	fieldObj->Data = *outPtr;
 
 	// Return the newly created object
@@ -362,7 +358,7 @@ UJsonFieldData* UJsonFieldData::GetObject(const FString& key, bool& success)
 	return fieldObj;
 }
 
-TArray<FString> UJsonFieldData::GetStringArray(const FString& key, bool& success)
+TArray<FString> UJSONFieldData::GetStringArray(const FString& key, bool& success)
 {
 	TArray<FString> stringArray;
 
@@ -388,7 +384,7 @@ TArray<FString> UJsonFieldData::GetStringArray(const FString& key, bool& success
 	return stringArray;
 }
 
-TArray<bool> UJsonFieldData::GetBoolArray(const FString& key, bool& success)
+TArray<bool> UJSONFieldData::GetBoolArray(const FString& key, bool& success)
 {
 	TArray<bool> array;
 
@@ -414,7 +410,7 @@ TArray<bool> UJsonFieldData::GetBoolArray(const FString& key, bool& success)
 	return array;
 }
 
-TArray<int32> UJsonFieldData::GetIntArray(const FString& key, bool& success)
+TArray<int32> UJSONFieldData::GetIntArray(const FString& key, bool& success)
 {
 	TArray<int32> array;
 
@@ -440,7 +436,7 @@ TArray<int32> UJsonFieldData::GetIntArray(const FString& key, bool& success)
 	return array;
 }
 
-TArray<float> UJsonFieldData::GetFloatArray(const FString& key, bool& success)
+TArray<float> UJSONFieldData::GetFloatArray(const FString& key, bool& success)
 {
 	TArray<float> array;
 
@@ -466,9 +462,9 @@ TArray<float> UJsonFieldData::GetFloatArray(const FString& key, bool& success)
 	return array;
 }
 
-TArray<UJsonFieldData*> UJsonFieldData::GetObjectArray(UObject* WorldContextObject, const FString& key, bool& success)
+TArray<UJSONFieldData*> UJSONFieldData::GetObjectArray(UObject* WorldContextObject, const FString& key, bool& success)
 {
-	TArray<UJsonFieldData*> objectArray;
+	TArray<UJSONFieldData*> objectArray;
 
 	// Try to fetch and assign the array to the array pointer
 	const TArray<TSharedPtr<FJsonValue>> *arrayPtr;
@@ -477,7 +473,7 @@ TArray<UJsonFieldData*> UJsonFieldData::GetObjectArray(UObject* WorldContextObje
 		// Iterate through the input array and create new post data objects for every entry and add them to the objectArray
 		for (int32 i = 0; i < arrayPtr->Num(); i++)
 		{
-			UJsonFieldData* pageData = Create(WorldContextObject); 
+			UJSONFieldData* pageData = Create(WorldContextObject); 
 			pageData->Data = (*arrayPtr)[i]->AsObject();
 			objectArray.Add(pageData);
 		}
@@ -494,7 +490,7 @@ TArray<UJsonFieldData*> UJsonFieldData::GetObjectArray(UObject* WorldContextObje
 	return objectArray;
 }
 
-TArray<FString> UJsonFieldData::GetObjectKeys(UObject* WorldContextObject)
+TArray<FString> UJSONFieldData::GetObjectKeys(UObject* WorldContextObject)
 {
 	TArray<FString> stringArray;
 
@@ -507,7 +503,7 @@ TArray<FString> UJsonFieldData::GetObjectKeys(UObject* WorldContextObject)
 	return stringArray;
 }
 
-FString UJsonFieldData::GetString(const FString& key, bool& success) const
+FString UJSONFieldData::GetString(const FString& key, bool& success) const
 {
 	FString outString;
 
@@ -523,7 +519,7 @@ FString UJsonFieldData::GetString(const FString& key, bool& success) const
 	return outString;
 }
 
-bool UJsonFieldData::GetBool(const FString& key, bool& success) const
+bool UJSONFieldData::GetBool(const FString& key, bool& success) const
 {
 	bool value;
 
@@ -539,7 +535,7 @@ bool UJsonFieldData::GetBool(const FString& key, bool& success) const
 	return value;
 }
 
-int32 UJsonFieldData::GetInt(const FString& key, bool& success) const
+int32 UJSONFieldData::GetInt(const FString& key, bool& success) const
 {
 	int32 value;
 
@@ -555,7 +551,7 @@ int32 UJsonFieldData::GetInt(const FString& key, bool& success) const
 	return value;
 }
 
-float UJsonFieldData::GetFloat(const FString& key, bool& success) const
+float UJSONFieldData::GetFloat(const FString& key, bool& success) const
 {
 	double value;
 
@@ -571,7 +567,7 @@ float UJsonFieldData::GetFloat(const FString& key, bool& success) const
 	return static_cast<float>(value);
 }
 
-bool UJsonFieldData::GetIsNull(const FString& key, bool& success) const
+bool UJSONFieldData::GetIsNull(const FString& key, bool& success) const
 {
 	// If the current post data isn't valid, return an empty string
 	if (!Data->HasField(key))
@@ -585,7 +581,7 @@ bool UJsonFieldData::GetIsNull(const FString& key, bool& success) const
 	return Data->HasTypedField<EJson::Null>(key);
 }
 
-void UJsonFieldData::Reset()
+void UJSONFieldData::Reset()
 {
 	// If the post data is valid
 	if (Data.IsValid())
@@ -598,7 +594,7 @@ void UJsonFieldData::Reset()
 	Data = MakeShareable(new FJsonObject());
 }
 
-bool UJsonFieldData::FromString(const FString& dataString)
+bool UJSONFieldData::FromString(const FString& dataString)
 {
 	TSharedRef<TJsonReader<TCHAR>> JsonReader = TJsonReaderFactory<TCHAR>::Create(dataString);
 
@@ -614,7 +610,7 @@ bool UJsonFieldData::FromString(const FString& dataString)
 	return true;
 }
 
-bool UJsonFieldData::FromFile(const FString& FilePath) {
+bool UJSONFieldData::FromFile(const FString& FilePath) {
 
 	FString Result;
 	FString FullJsonPath = FPaths::ConvertRelativePathToFull(FPaths::ProjectContentDir() / FilePath);
@@ -626,7 +622,7 @@ bool UJsonFieldData::FromFile(const FString& FilePath) {
 	return FromString(Result);
 }
 
-void UJsonFieldData::OnReady(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bWasSuccessful)
+void UJSONFieldData::OnReady(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bWasSuccessful)
 {
 	RemoveFromRoot();
 	if (!bWasSuccessful)
@@ -648,7 +644,7 @@ void UJsonFieldData::OnReady(FHttpRequestPtr Request, FHttpResponsePtr Response,
 	OnGetResult.Broadcast(true, this, EJSONResult::Success);
 }
 
-FString UJsonFieldData::ToString()
+FString UJSONFieldData::ToString()
 {
 	FString outStr;
 	TSharedRef<TJsonWriter<TCHAR>> JsonWriter = TJsonWriterFactory<TCHAR>::Create(&outStr);
@@ -660,12 +656,12 @@ FString UJsonFieldData::ToString()
 	return outStr;
 }
 
-bool UJsonFieldData::HasField(const FString& key)
+bool UJSONFieldData::HasField(const FString& key)
 {
 	return Data->HasField(key);
 }
 
-bool UJsonFieldData::SaveStringTextToFile(FString SaveDirectory, FString FileName, FString SaveText, bool AllowOverWriting)
+bool UJSONFieldData::SaveStringTextToFile(FString SaveDirectory, FString FileName, FString SaveText, bool AllowOverWriting)
 {
 	IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
 

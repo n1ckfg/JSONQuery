@@ -1,12 +1,6 @@
-#include "JSONQueryModule.h"
+#include "JSONQuery.h"
 
-IMPLEMENT_MODULE(JSONQueryModule, JSONQuery);
-
-#define LOCTEXT_NAMESPACE "JSONQuery"
-
-JSONQueryModule::JSONQueryModule()
-{
-}
+#define LOCTEXT_NAMESPACE "JSONQueryModule"
 
 void JSONQueryModule::StartupModule()
 {
@@ -19,3 +13,7 @@ void JSONQueryModule::ShutdownModule()
 	// Shutdown LOG MSG
 	UE_LOG(JSONQueryLog, Warning, TEXT("JSONQuery: Log Ended"));
 }
+
+#undef LOCTEXT_NAMESPACE
+
+IMPLEMENT_MODULE(JSONQueryModule, JSONQuery);
