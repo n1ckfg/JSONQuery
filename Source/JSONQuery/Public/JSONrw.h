@@ -11,5 +11,10 @@ class JSONQUERY_API AJSONrw : public AActor
 
 	public:
 		AJSONrw();
-		void BeginPlay();
+
+		TSharedPtr<FJsonObject> JsonParsed;
+
+	protected:
+		virtual void BeginPlay() override;
+
 };
