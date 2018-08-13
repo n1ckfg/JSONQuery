@@ -11,7 +11,7 @@ void AJSONrw::BeginPlay()
 
 	UE_LOG(JSONQueryLog, Warning, TEXT("Begin loading JSON."));
 
-	FString url = FPaths::ConvertRelativePathToFull(FPaths::ProjectDir()) + "Plugins/JSONQuery/Content/Example/Json/input.json";
+	FString url = FPaths::ConvertRelativePathToFull(FPaths::ProjectDir()) + "Plugins/JSONQuery/Content/Examples/Json/input.json";
 	UE_LOG(JSONQueryLog, Warning, TEXT("Loading File %s"), *url);
 
 	FString JsonRaw;
