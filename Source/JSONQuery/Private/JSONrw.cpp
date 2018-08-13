@@ -11,7 +11,7 @@ void AJSONrw::BeginPlay()
 
 	UE_LOG(JSONQueryLog, Warning, TEXT("Begin loading JSON."));
 
-	FString url = FPaths::ConvertRelativePathToFull(FPaths::ProjectDir()) + "Plugins/JSONQuery/Content/Example_BP/Json/input.json";
+	FString url = FPaths::ConvertRelativePathToFull(FPaths::ProjectDir()) + "Plugins/JSONQuery/Content/Example/Json/input.json";
 	UE_LOG(JSONQueryLog, Warning, TEXT("Loading File %s"), *url);
 
 	FString JsonRaw;
@@ -24,7 +24,17 @@ void AJSONrw::BeginPlay()
 	if (FJsonSerializer::Deserialize(JsonReader, JsonParsed)) {
 		UE_LOG(JSONQueryLog, Warning, TEXT("Parsing JSON."));
 		
-		TArray <TSharedPtr<FJsonValue>> objs = JsonParsed->GetArrayField("objects");
+		TArray<TSharedPtr<FJsonValue>> objs = JsonParsed->GetArrayField("objects");
+
+		if (objs.Num() > 0)
+		{
+			UE_LOG(JSONQueryLog, Warning, TEXT("Found array with objects: "), objs.Num());
+		}
+		else
+		{
+			UE_LOG(JSONQueryLog, Warning, TEXT("Did not find array."));
+		}
+
 		for (int i = 0; i < objs.Num(); i++)
 		{
 			TSharedPtr <FJsonObject> obj = objs[i]->AsObject();
