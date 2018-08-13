@@ -3,13 +3,8 @@
 
 #include "JSONQuery.h"
 
-//#include "Map.h"
-#include "Engine/Engine.h"
-#include "CoreMinimal.h"
-#include "Http.h"
-#include "Json.h"
-
-#include "JSONFieldData.generated.h"
+// this must always be the last include
+#include "JSONFieldData.generated.h" 
 
 /**
 * The possible status of a JSON POST/GET call.
