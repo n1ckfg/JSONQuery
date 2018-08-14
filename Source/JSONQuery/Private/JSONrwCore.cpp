@@ -1,11 +1,11 @@
-#include "JSONrw.h"
+#include "JSONrwCore.h"
 
-AJSONrw::AJSONrw() 
+AJSONrwCore::AJSONrwCore()
 {
-
+	//
 }
 
-void AJSONrw::BeginPlay() 
+void AJSONrwCore::BeginPlay()
 { 
 	Super::BeginPlay(); 
 
@@ -29,3 +29,12 @@ void AJSONrw::BeginPlay()
 		UE_LOG(JSONQueryLog, Error, TEXT("Error trying to deserialize JSON."));
 	}
 }
+
+FVector AJSONrwCore::getFVector(TArray<TSharedPtr<FJsonValue>> jsonNode)
+{
+	float x = jsonNode[0]->AsNumber();
+	float y = jsonNode[1]->AsNumber();
+	float z = jsonNode[2]->AsNumber();
+	return FVector(x, y, z);
+}
+

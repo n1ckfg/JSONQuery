@@ -2,7 +2,6 @@
 
 #include "JSONrwExample.h"
 
-
 // Sets default values
 AJSONrwExample::AJSONrwExample()
 {
@@ -14,22 +13,31 @@ void AJSONrwExample::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	TArray<TSharedPtr<FJsonValue>> objs = JsonParsed->GetArrayField("objects");
+	TArray<TSharedPtr<FJsonValue>> jsonNodes = JsonParsed->GetArrayField("objects");
 
-	if (objs.Num() > 0)
+	if (jsonNodes.Num() > 0)
 	{
-		UE_LOG(JSONQueryLog, Warning, TEXT("Found array with objects: %i"), objs.Num());
+		UE_LOG(JSONQueryLog, Warning, TEXT("Found array with objects: %i"), jsonNodes.Num());
 	}
 	else
 	{
 		UE_LOG(JSONQueryLog, Warning, TEXT("Did not find array."));
 	}
 
-	for (int i = 0; i < objs.Num(); i++)
+	for (int i = 0; i < jsonNodes.Num(); i++)
 	{
-		TSharedPtr <FJsonObject> obj = objs[i]->AsObject();
-		FString typeVal = obj->GetStringField("type");
-		UE_LOG(JSONQueryLog, Warning, TEXT("FOUND TYPE: %s"), *typeVal);
+		TSharedPtr<FJsonObject> jsonNode = jsonNodes[i]->AsObject();
+
+		FExampleObj newObject = FExampleObj();
+
+		newObject.type = jsonNode->GetStringField("type");
+		newObject.position = getFVector(jsonNode->GetArrayField("position"));
+		newObject.rotation = getFVector(jsonNode->GetArrayField("rotation"));
+		newObject.scale = getFVector(jsonNode->GetArrayField("scale"));
+
+		UE_LOG(JSONQueryLog, Warning, TEXT("FOUND TYPE: %s"), *newObject.type);
+	
+		objects.Add(newObject);
 	}
 
 	/*
@@ -41,3 +49,8 @@ void AJSONrwExample::BeginPlay()
 	*/
 }
 
+void AJSONrwExample::CreateMesh(FString MeshName)
+{
+	UStaticMesh *MeshAsset = Cast<UStaticMesh>(StaticLoadObject(UStaticMesh::StaticClass(), NULL, *MeshName));
+	Mesh->SetStaticMesh(MeshAsset);
+}

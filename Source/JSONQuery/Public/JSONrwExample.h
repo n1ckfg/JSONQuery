@@ -2,20 +2,42 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
-#include "JSONrw.h"
+#include "JSONrwCore.h"
+
 #include "JSONrwExample.generated.h"
 
+USTRUCT()
+struct FExampleObj 
+{
+	GENERATED_BODY()
+
+	FString type;
+	FVector position;
+	FVector rotation;
+	FVector scale;
+
+	FExampleObj()  
+	{
+		type = "none";
+		position = FVector(0, 0, 0);
+		rotation = FVector(0, 0, 0);
+		scale = FVector(1, 1, 1);
+	}
+};
+
 UCLASS()
-class JSONQUERY_API AJSONrwExample : public AJSONrw
+class JSONQUERY_API AJSONrwExample : public AJSONrwCore
 {
 	GENERATED_BODY()
 	
-public:	
-	AJSONrwExample();
+	public:	
+		AJSONrwExample();
+		void CreateMesh(FString MeshName);
 
-protected:
-	virtual void BeginPlay() override;
+		TArray<FExampleObj> objects;
+		UStaticMeshComponent *Mesh;
+
+	protected:
+		virtual void BeginPlay() override;
 
 };
