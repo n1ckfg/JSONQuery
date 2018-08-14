@@ -4,8 +4,10 @@
 
 #include "GameFramework/Actor.h"
 #include "Engine/StaticMesh.h"
+#include "EngineUtils.h"
 #include "Components/StaticMeshComponent.h"
 #include "CoreMinimal.h"
+#include "ConstructorHelpers.h"
 
 #include "JSONrwCore.generated.h"
 

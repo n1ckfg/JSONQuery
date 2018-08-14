@@ -32,7 +32,9 @@ class JSONQUERY_API AJSONrwExample : public AJSONrwCore
 	
 	public:	
 		AJSONrwExample();
-		void CreateMesh(FString MeshName);
+		void createMesh(FString MeshName);
+		void spawnCube();
+		FExampleObj createObject(TSharedPtr<FJsonObject> jsonNode);
 
 		TArray<FExampleObj> objects;
 		UStaticMeshComponent *Mesh;
