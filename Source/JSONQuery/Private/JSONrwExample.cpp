@@ -59,16 +59,3 @@ void AJSONrwExample::createMesh(FString MeshName)
 	UStaticMesh *MeshAsset = Cast<UStaticMesh>(StaticLoadObject(UStaticMesh::StaticClass(), NULL, *MeshName));
 	Mesh->SetStaticMesh(MeshAsset);
 }
-
-void AJSONrwExample::spawnCube()
-{
-	UWorld * const World = GetWorld();
-	if (World)
-	{
-		static ConstructorHelpers::FClassFinder<AActor> classFinder(TEXT("/Plugins/JSONQuery/Content/Examples/Blueprints/BP_TestCube.BP_TestCube"));
-		if (classFinder.Class != nullptr)
-		{
-			World->SpawnActor<AActor>(classFinder.Class);
-		}
-	}
-}
