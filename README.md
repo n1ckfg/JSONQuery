@@ -3,9 +3,9 @@
 Name | JSON Query
 --- | ---
 Category | Web
-Author | [Stefan "Stefander" Wijnker](http://www.stefander.nl/)
-Version | 0.95
-UE4 Build | 4.15.0
+Author | [Stefan "Stefander" Wijnker](http://www.stefander.nl/) + [Nick Fox-Gieg](http://fox-gieg.com)
+Version | 1.0
+UE4 Build | 4.19.0
 Discuss | https://forums.unrealengine.com/showthread.php?7045-PLUGIN-JSON-Query
 
 ## Overview
@@ -14,11 +14,8 @@ common [JSON](http://en.wikipedia.org/wiki/JSON) protocol. Everything in this pl
 Blueprints, which allows you to fully customize the post data and event dispatcher flow.
 
 ## Downloads
-Latest version (Binary):
-[JSONQueryUE4.8.3.zip](https://github.com/marynate/JSONQuery_UE4/releases/download/0.91/JSONQuery-Bin-4.8.3.zip)
-
 Latest version (Source):
-https://github.com/marynate/JSONQuery_UE4
+https://github.com/n1ckfg/JSONQuery
 
 ## Blueprint Examples
 
