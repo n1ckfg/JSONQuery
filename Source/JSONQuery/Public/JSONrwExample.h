@@ -12,6 +12,7 @@ struct FExampleObj
 	GENERATED_BODY()
 
 	FString type;
+	AActor* bp;
 	FVector position;
 	FVector rotation;
 	FVector scale;
@@ -19,6 +20,7 @@ struct FExampleObj
 	FExampleObj()  
 	{
 		type = "none";
+		bp = nullptr;
 		position = FVector(0, 0, 0);
 		rotation = FVector(0, 0, 0);
 		scale = FVector(1, 1, 1);
@@ -37,17 +39,9 @@ class JSONQUERY_API AJSONrwExample : public AJSONrwCore
 		FExampleObj createObject(TSharedPtr<FJsonObject> jsonNode);
 		TArray<FExampleObj> objects;
 
-		UClass* findBlueprint(ConstructorHelpers::FObjectFinder<UBlueprint> finder);
-		FString formatBlueprintUrl(FString url);
-		FString formatBlueprintName(FString url);
-		TSubclassOf<class AActor> BP_TestCube; // This is a reference to your Blueprint asset
-		TSubclassOf<class AActor> BP_TestSphere; // This is a reference to your Blueprint asset
-		AActor* testCube; // This is a new object spawned in the world
-		AActor* testSphere; // This is a new object spawned in the world
+		TSubclassOf<class AActor> BP_TestCube, BP_TestSphere;
 
 		UStaticMeshComponent *Mesh;
-
-
 
 	protected:
 		virtual void BeginPlay() override;

@@ -5,12 +5,10 @@
 // Sets default values
 AJSONrwExample::AJSONrwExample()
 {
-	// Declare one static FObjectFinder for each blueprint reference.
 	static ConstructorHelpers::FObjectFinder<UBlueprint> finder_BP_TestCube(*formatBlueprintUrl("/Plugins/JSONQuery/Examples/Blueprints/BP_TestCube"));
-	static ConstructorHelpers::FObjectFinder<UBlueprint> finder_BP_TestSphere(*formatBlueprintUrl("/Plugins/JSONQuery/Examples/Blueprints/BP_TestSphere"));
-
-	// Initialize each Blueprint reference in the constructor.
 	BP_TestCube = findBlueprint(finder_BP_TestCube);
+
+	static ConstructorHelpers::FObjectFinder<UBlueprint> finder_BP_TestSphere(*formatBlueprintUrl("/Plugins/JSONQuery/Examples/Blueprints/BP_TestSphere"));
 	BP_TestSphere = findBlueprint(finder_BP_TestSphere);
 }
 
@@ -18,19 +16,12 @@ AJSONrwExample::AJSONrwExample()
 void AJSONrwExample::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	testCube = GetWorld()->SpawnActor(BP_TestCube);
-	testSphere = GetWorld()->SpawnActor(BP_TestSphere);
 
 	TArray<TSharedPtr<FJsonValue>> jsonNodes = JsonParsed->GetArrayField("objects");
 
 	if (jsonNodes.Num() > 0)
 	{
 		UE_LOG(JSONQueryLog, Warning, TEXT("Found array with objects: %i"), jsonNodes.Num());
-	}
-	else
-	{
-		UE_LOG(JSONQueryLog, Warning, TEXT("Did not find array."));
 	}
 
 	for (int i = 0; i < jsonNodes.Num(); i++)
@@ -39,6 +30,7 @@ void AJSONrwExample::BeginPlay()
 	}
 
 	/*
+	// more JSON examples:
 	TArray<TSharedPtr<FJsonValue>> exArray = JsonParsed->GetArrayField("ExampleArray");
 	TSharedPtr<FJsonObject> exArrayMember = exArray[0]->AsObject();
 	int exI = JsonParsed->GetIntegerField("ExampleInt");
@@ -54,9 +46,20 @@ FExampleObj AJSONrwExample::createObject(TSharedPtr<FJsonObject> jsonNode)
 	FExampleObj newObject = FExampleObj();
 
 	newObject.type = jsonNode->GetStringField("type");
+	if (newObject.type == "cube")
+	{
+		newObject.bp = GetWorld()->SpawnActor(BP_TestCube);
+	}
+	else if (newObject.type == "sphere")
+	{
+		newObject.bp = GetWorld()->SpawnActor(BP_TestSphere);
+	}
 	newObject.position = getFVector(jsonNode->GetArrayField("position"));
 	newObject.rotation = getFVector(jsonNode->GetArrayField("rotation"));
 	newObject.scale = getFVector(jsonNode->GetArrayField("scale"));
+
+	FTransform transform = getFTransform(newObject.position, newObject.rotation, newObject.scale);
+	newObject.bp->SetActorTransform(transform);
 
 	UE_LOG(JSONQueryLog, Warning, TEXT("FOUND TYPE: %s"), *newObject.type);
 
@@ -69,35 +72,5 @@ void AJSONrwExample::createMesh(FString MeshName)
 	Mesh->SetStaticMesh(MeshAsset);
 }
 
-UClass* AJSONrwExample::findBlueprint(ConstructorHelpers::FObjectFinder<UBlueprint> finder)
-{
-	FString url = finder.Object->GetPathName();
-	UE_LOG(JSONQueryLog, Warning, TEXT("Found Blueprint at url: %s"), *url);
-	return (UClass*) finder.Object->GeneratedClass;
-}
 
-// This is needed because a valid Blueprint url is slightly different from your directory structure
-FString AJSONrwExample::formatBlueprintUrl(FString url)
-{
-	TArray<FString> urlSplit;
-	url.ParseIntoArray(urlSplit, _T("/"));
-	if (urlSplit[0] == "Plugins")
-	{
-		urlSplit.RemoveAt(0);
-	}
-	else if (urlSplit[0] == "Content")
-	{
-		urlSplit[0] = "Game";
-	}
-	return "Blueprint'/" + FString::Join(urlSplit, _T("/")) + "." + urlSplit[urlSplit.Num() - 1] + "'";
-}
 
-FString AJSONrwExample::formatBlueprintName(FString url)
-{
-	TArray<FString> urlSplit;
-	url.ParseIntoArray(urlSplit, _T("/"));
-	FString filename = urlSplit[urlSplit.Num() - 1];
-	TArray<FString> filenameSplit;
-	filename.ParseIntoArray(filenameSplit, _T("."));
-	return filenameSplit[0];
-}
