@@ -37,7 +37,15 @@ class JSONQUERY_API AJSONrwExample : public AJSONrwCore
 
 		TArray<FExampleObj> objects;
 
+		TSubclassOf<class AActor> BP_TestCube; // This is a reference to your Blueprint asset
+		TSubclassOf<class AActor> BP_TestSphere; // This is a reference to your Blueprint asset
+		AActor* testCube; // This is a new object spawned in the world
+		AActor* testSphere; // This is a new object spawned in the world
+
 		UStaticMeshComponent *Mesh;
+
+		UClass* findBlueprint(FString url);
+		FString formatBlueprintUrl(FString url);
 
 	protected:
 		virtual void BeginPlay() override;

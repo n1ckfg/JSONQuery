@@ -5,7 +5,9 @@
 // Sets default values
 AJSONrwExample::AJSONrwExample()
 {
-	//
+	// Initializing Blueprint references has to happen in the constructor.
+	BP_TestCube = findBlueprint("/Plugins/JSONQuery/Examples/Blueprints/BP_TestCube");
+	BP_TestSphere = findBlueprint("/Plugins/JSONQuery/Examples/Blueprints/BP_TestSphere");
 }
 
 // Called when the game starts or when spawned
@@ -13,6 +15,9 @@ void AJSONrwExample::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	testCube = GetWorld()->SpawnActor(BP_TestCube);
+	testSphere = GetWorld()->SpawnActor(BP_TestSphere);
+
 	TArray<TSharedPtr<FJsonValue>> jsonNodes = JsonParsed->GetArrayField("objects");
 
 	if (jsonNodes.Num() > 0)
@@ -58,4 +63,37 @@ void AJSONrwExample::createMesh(FString MeshName)
 {
 	UStaticMesh *MeshAsset = Cast<UStaticMesh>(StaticLoadObject(UStaticMesh::StaticClass(), NULL, *MeshName));
 	Mesh->SetStaticMesh(MeshAsset);
+}
+
+UClass* AJSONrwExample::findBlueprint(FString url)
+{
+	url = formatBlueprintUrl(url);
+
+	static ConstructorHelpers::FObjectFinder<UBlueprint> finder(*url);
+	if (finder.Object != NULL)
+	{
+		UE_LOG(JSONQueryLog, Warning, TEXT("Found Blueprint at %s"), *url);
+		return (UClass*) finder.Object->GeneratedClass;
+	}
+	else
+	{
+		UE_LOG(JSONQueryLog, Warning, TEXT("Failed to find Blueprint at %s"), *url);
+		return NULL;
+	}
+}
+
+// This is needed because a valid Blueprint url is slightly different from your directory structure
+FString AJSONrwExample::formatBlueprintUrl(FString url)
+{
+	TArray<FString> urlSplit;
+	url.ParseIntoArray(urlSplit, _T("/"));
+	if (urlSplit[0] == "Plugins")
+	{
+		urlSplit.RemoveAt(0);
+	}
+	else if (urlSplit[0] == "Content")
+	{
+		urlSplit[0] = "Game";
+	}
+	return "Blueprint'/" + FString::Join(urlSplit, _T("/")) + "." + urlSplit[urlSplit.Num() - 1] + "'";
 }
