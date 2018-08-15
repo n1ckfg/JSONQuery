@@ -5,9 +5,13 @@
 // Sets default values
 AJSONrwExample::AJSONrwExample()
 {
-	// Initializing Blueprint references has to happen in the constructor.
-	BP_TestCube = findBlueprint("/Plugins/JSONQuery/Examples/Blueprints/BP_TestCube");
-	BP_TestSphere = findBlueprint("/Plugins/JSONQuery/Examples/Blueprints/BP_TestSphere");
+	// Declare one static FObjectFinder for each blueprint reference.
+	static ConstructorHelpers::FObjectFinder<UBlueprint> finder_BP_TestCube(*formatBlueprintUrl("/Plugins/JSONQuery/Examples/Blueprints/BP_TestCube"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint> finder_BP_TestSphere(*formatBlueprintUrl("/Plugins/JSONQuery/Examples/Blueprints/BP_TestSphere"));
+
+	// Initialize each Blueprint reference in the constructor.
+	BP_TestCube = findBlueprint(finder_BP_TestCube);
+	BP_TestSphere = findBlueprint(finder_BP_TestSphere);
 }
 
 // Called when the game starts or when spawned
@@ -65,21 +69,11 @@ void AJSONrwExample::createMesh(FString MeshName)
 	Mesh->SetStaticMesh(MeshAsset);
 }
 
-UClass* AJSONrwExample::findBlueprint(FString url)
+UClass* AJSONrwExample::findBlueprint(ConstructorHelpers::FObjectFinder<UBlueprint> finder)
 {
-	url = formatBlueprintUrl(url);
-
-	static ConstructorHelpers::FObjectFinder<UBlueprint> finder(*url);
-	if (finder.Object != NULL)
-	{
-		UE_LOG(JSONQueryLog, Warning, TEXT("Found Blueprint at %s"), *url);
-		return (UClass*) finder.Object->GeneratedClass;
-	}
-	else
-	{
-		UE_LOG(JSONQueryLog, Warning, TEXT("Failed to find Blueprint at %s"), *url);
-		return NULL;
-	}
+	FString url = finder.Object->GetPathName();
+	UE_LOG(JSONQueryLog, Warning, TEXT("Found Blueprint at url: %s"), *url);
+	return (UClass*) finder.Object->GeneratedClass;
 }
 
 // This is needed because a valid Blueprint url is slightly different from your directory structure
@@ -96,4 +90,14 @@ FString AJSONrwExample::formatBlueprintUrl(FString url)
 		urlSplit[0] = "Game";
 	}
 	return "Blueprint'/" + FString::Join(urlSplit, _T("/")) + "." + urlSplit[urlSplit.Num() - 1] + "'";
+}
+
+FString AJSONrwExample::formatBlueprintName(FString url)
+{
+	TArray<FString> urlSplit;
+	url.ParseIntoArray(urlSplit, _T("/"));
+	FString filename = urlSplit[urlSplit.Num() - 1];
+	TArray<FString> filenameSplit;
+	filename.ParseIntoArray(filenameSplit, _T("."));
+	return filenameSplit[0];
 }

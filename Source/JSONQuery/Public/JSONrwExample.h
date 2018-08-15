@@ -33,10 +33,13 @@ class JSONQUERY_API AJSONrwExample : public AJSONrwCore
 	public:	
 		AJSONrwExample();
 		void createMesh(FString MeshName);
-		FExampleObj createObject(TSharedPtr<FJsonObject> jsonNode);
 
+		FExampleObj createObject(TSharedPtr<FJsonObject> jsonNode);
 		TArray<FExampleObj> objects;
 
+		UClass* findBlueprint(ConstructorHelpers::FObjectFinder<UBlueprint> finder);
+		FString formatBlueprintUrl(FString url);
+		FString formatBlueprintName(FString url);
 		TSubclassOf<class AActor> BP_TestCube; // This is a reference to your Blueprint asset
 		TSubclassOf<class AActor> BP_TestSphere; // This is a reference to your Blueprint asset
 		AActor* testCube; // This is a new object spawned in the world
@@ -44,8 +47,7 @@ class JSONQUERY_API AJSONrwExample : public AJSONrwCore
 
 		UStaticMeshComponent *Mesh;
 
-		UClass* findBlueprint(FString url);
-		FString formatBlueprintUrl(FString url);
+
 
 	protected:
 		virtual void BeginPlay() override;
