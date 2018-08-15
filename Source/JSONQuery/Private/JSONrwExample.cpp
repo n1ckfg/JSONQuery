@@ -29,6 +29,15 @@ void AJSONrwExample::BeginPlay()
 		objects.Add(createObject(jsonNodes[i]->AsObject()));
 	}
 
+	TArray<AActor*> actors;
+	findAllActors(GetWorld(), actors);
+	
+	TArray<FString> output;
+	output.Add("eeee");
+	output.Add("eaadafgaee");
+
+	writeFile(FPaths::ProjectDir(), "output_cpp.json", FString::Join(output, _T("\n")), true);
+
 	/*
 	// more JSON examples:
 	TArray<TSharedPtr<FJsonValue>> exArray = JsonParsed->GetArrayField("ExampleArray");
@@ -54,11 +63,11 @@ FExampleObj AJSONrwExample::createObject(TSharedPtr<FJsonObject> jsonNode)
 	{
 		newObject.bp = GetWorld()->SpawnActor(BP_TestSphere);
 	}
-	newObject.position = getFVector(jsonNode->GetArrayField("position"));
-	newObject.rotation = getFVector(jsonNode->GetArrayField("rotation"));
-	newObject.scale = getFVector(jsonNode->GetArrayField("scale"));
+	newObject.position = vecFromJson(jsonNode->GetArrayField("position"));
+	newObject.rotation = vecFromJson(jsonNode->GetArrayField("rotation"));
+	newObject.scale = vecFromJson(jsonNode->GetArrayField("scale"));
 
-	FTransform transform = getFTransform(newObject.position, newObject.rotation, newObject.scale);
+	FTransform transform = makeTransform(newObject.position, newObject.rotation, newObject.scale);
 	newObject.bp->SetActorTransform(transform);
 
 	UE_LOG(JSONQueryLog, Warning, TEXT("FOUND TYPE: %s"), *newObject.type);
