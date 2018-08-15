@@ -8,6 +8,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "CoreMinimal.h"
 #include "ConstructorHelpers.h"
+#include "Runtime/Engine/Classes/Kismet/KismetMathLibrary.h"
 
 #include "JSONrwCore.generated.h"
 
@@ -23,8 +24,7 @@ class JSONQUERY_API AJSONrwCore : public AActor
 		UClass* findBlueprint(ConstructorHelpers::FObjectFinder<UBlueprint> finder);
 		FVector vecFromJson(TArray<TSharedPtr<FJsonValue>> jsonNode); 
 		FTransform transformFromJson(TArray<TSharedPtr<FJsonValue>> position, TArray<TSharedPtr<FJsonValue>> rotation, TArray<TSharedPtr<FJsonValue>> scale);
-		FTransform makeTransform(FVector position, FVector rotation, FVector scale);
-		FTransform makeTransform(FVector position, FQuat rotation, FVector scale);
+		FTransform transformFromVec(FVector rotation, FVector position, FVector scale);
 
 		template<typename T>
 		void findAllActors(UWorld* World, TArray<T*>& Out);

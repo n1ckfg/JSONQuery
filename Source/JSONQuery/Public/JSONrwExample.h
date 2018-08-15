@@ -34,13 +34,14 @@ class JSONQUERY_API AJSONrwExample : public AJSONrwCore
 	
 	public:	
 		AJSONrwExample();
-		void createMesh(FString MeshName);
 
 		FExampleObj createObject(TSharedPtr<FJsonObject> jsonNode);
 		TArray<FExampleObj> objects;
+		bool writeJson(FString SaveDirectory, FString FileName);
 
 		TSubclassOf<class AActor> BP_TestCube, BP_TestSphere;
 
+		void createMesh(FString MeshName);
 		UStaticMeshComponent *Mesh;
 
 	protected:

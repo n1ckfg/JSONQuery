@@ -61,19 +61,15 @@ FVector AJSONrwCore::vecFromJson(TArray<TSharedPtr<FJsonValue>> jsonNode)
 	return FVector(x, y, z);
 }
 
-FTransform AJSONrwCore::transformFromJson(TArray<TSharedPtr<FJsonValue>> position, TArray<TSharedPtr<FJsonValue>> rotation, TArray<TSharedPtr<FJsonValue>> scale)
+FTransform AJSONrwCore::transformFromJson(TArray<TSharedPtr<FJsonValue>> rotation, TArray<TSharedPtr<FJsonValue>> position, TArray<TSharedPtr<FJsonValue>> scale)
 {
-	return FTransform(vecFromJson(rotation).Rotation().Quaternion(), vecFromJson(position), vecFromJson(scale));
+	FVector rot = vecFromJson(rotation);
+	return FTransform(UKismetMathLibrary::MakeRotator(rot.X, rot.Y, rot.Z), vecFromJson(position), vecFromJson(scale));
 }
 
-FTransform AJSONrwCore::makeTransform(FVector position, FVector rotation, FVector scale)
+FTransform AJSONrwCore::transformFromVec(FVector rotation, FVector position, FVector scale)
 {
-	return FTransform(rotation.Rotation().Quaternion(), position, scale);
-}
-
-FTransform AJSONrwCore::makeTransform(FVector position, FQuat rotation, FVector scale)
-{
-	return FTransform(rotation, position, scale);
+	return FTransform(UKismetMathLibrary::MakeRotator(rotation.X, rotation.Y, rotation.Z), position, scale);
 }
 
 template<typename T>
