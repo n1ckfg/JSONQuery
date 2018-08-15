@@ -1,11 +1,11 @@
-# JSONQuery_UE4
+# JSONQuery
 
-Name | JSON Query
+Name | JSONQuery
 --- | ---
 Category | Web
 Author | [Stefan "Stefander" Wijnker](http://www.stefander.nl/) + [Nick Fox-Gieg](http://fox-gieg.com)
 Version | 1.0
-UE4 Build | 4.19.0
+UE4 Build | 4.19.2
 Discuss | https://forums.unrealengine.com/showthread.php?7045-PLUGIN-JSON-Query
 
 ## Overview
