@@ -41,7 +41,7 @@ class JSONQUERY_API AJSONrwExample : public AJSONrwCore
 
 		TSubclassOf<class AActor> BP_TestCube, BP_TestSphere;
 
-		void createMesh(FString MeshName);
+		void loadMesh(FString MeshName);
 		UStaticMeshComponent *Mesh;
 
 	protected:

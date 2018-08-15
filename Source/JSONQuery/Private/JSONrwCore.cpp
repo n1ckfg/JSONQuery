@@ -30,22 +30,6 @@ void AJSONrwCore::BeginPlay()
 	}
 }
 
-// This is needed because a valid Blueprint url is slightly different from your directory structure
-FString AJSONrwCore::formatBlueprintUrl(FString url)
-{
-	TArray<FString> urlSplit;
-	url.ParseIntoArray(urlSplit, _T("/"));
-	if (urlSplit[0] == "Plugins")
-	{
-		urlSplit.RemoveAt(0);
-	}
-	else if (urlSplit[0] == "Content")
-	{
-		urlSplit[0] = "Game";
-	}
-	return "Blueprint'/" + FString::Join(urlSplit, _T("/")) + "." + urlSplit[urlSplit.Num() - 1] + "'";
-}
-
 UClass* AJSONrwCore::findBlueprint(ConstructorHelpers::FObjectFinder<UBlueprint> finder)
 {
 	FString url = finder.Object->GetPathName();

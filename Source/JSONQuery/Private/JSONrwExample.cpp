@@ -5,10 +5,10 @@
 // Sets default values
 AJSONrwExample::AJSONrwExample()
 {
-	static ConstructorHelpers::FObjectFinder<UBlueprint> finder_BP_TestCube(*formatBlueprintUrl("/Plugins/JSONQuery/Examples/Blueprints/BP_TestCube"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint> finder_BP_TestCube(TEXT("Blueprint'/JSONQuery/Examples/Blueprints/BP_TestCube.BP_TestCube'"));
 	BP_TestCube = findBlueprint(finder_BP_TestCube);
 
-	static ConstructorHelpers::FObjectFinder<UBlueprint> finder_BP_TestSphere(*formatBlueprintUrl("/Plugins/JSONQuery/Examples/Blueprints/BP_TestSphere"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint> finder_BP_TestSphere(TEXT("Blueprint'/JSONQuery/Examples/Blueprints/BP_TestSphere.BP_TestSphere'"));
 	BP_TestSphere = findBlueprint(finder_BP_TestSphere);
 }
 
@@ -121,12 +121,6 @@ FExampleObj AJSONrwExample::createObject(TSharedPtr<FJsonObject> jsonNode)
 	UE_LOG(JSONQueryLog, Warning, TEXT("FOUND TYPE: %s"), *newObject.type);
 
 	return newObject;
-}
-
-void AJSONrwExample::createMesh(FString MeshName)
-{
-	UStaticMesh *MeshAsset = Cast<UStaticMesh>(StaticLoadObject(UStaticMesh::StaticClass(), NULL, *MeshName));
-	Mesh->SetStaticMesh(MeshAsset);
 }
 
 
