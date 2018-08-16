@@ -94,7 +94,7 @@ bool AJSONrwExample::writeJson(FString SaveDirectory, FString FileName)
 	output.Add("\t]");
 	output.Add("}");
 
-	return writeFile(SaveDirectory, FileName, FString::Join(output, _T("\n")), true);
+	return writeFile(SaveDirectory, FileName, FString::Join(output, TEXT("\n")), true);
 }
 
 
