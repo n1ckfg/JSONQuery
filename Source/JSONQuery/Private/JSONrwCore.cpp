@@ -18,7 +18,6 @@ void AJSONrwCore::BeginPlay()
 	FFileHelper::LoadFileToString(JsonRaw, *url);
 	UE_LOG(JSONQueryLog, Warning, TEXT("JSON Raw: %s"), *JsonRaw);
 
-	//TSharedPtr<FJsonObject> JsonParsed;
 	TSharedRef<TJsonReader<TCHAR>> JsonReader = TJsonReaderFactory<TCHAR>::Create(JsonRaw);
 
 	if (FJsonSerializer::Deserialize(JsonReader, JsonParsed)) {
@@ -56,28 +55,15 @@ FTransform AJSONrwCore::transformFromVec(FVector rotation, FVector position, FVe
 	return FTransform(UKismetMathLibrary::MakeRotator(rotation.X, rotation.Y, rotation.Z), position, scale);
 }
 
-template<typename T>
-void AJSONrwCore::findAllActors(UWorld* World, TArray<T*>& Out)
+void AJSONrwCore::findAllActors(UWorld* World, TArray<AActor*>& Out)
 {
-	for (TActorIterator<AActor> It(World, T::StaticClass()); It; ++It)
+	for (TActorIterator<AActor> It(World, AActor::StaticClass()); It; ++It) 
 	{
-		T* Actor = Cast<T>(*It);
+		AActor* Actor = Cast<AActor>(*It);
 		if (Actor && !Actor->IsPendingKill())
 		{
 			Out.Add(Actor);
 		}
-	}
-}
-
-template<typename T>
-void AJSONrwCore::findAllObjects(TArray<T*>& OutArray)
-{
-	FAssetRegistryModule& AssetRegistryModule = FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
-	TArray<FAssetData> AssetData;
-	AssetRegistryModule.Get().GetAssetsByClass(T::StaticClass()->GetFName(), AssetData);
-	for (int i = 0; i < AssetData.Num(); i++) {
-		T* Object = Cast<T>(AssetData[i].GetAsset());
-		OutArray.Add(Object);
 	}
 }
 

@@ -17,11 +17,7 @@ class JSONQUERY_API AJSONrwCore : public AActor
 		FTransform transformFromJson(TArray<TSharedPtr<FJsonValue>> position, TArray<TSharedPtr<FJsonValue>> rotation, TArray<TSharedPtr<FJsonValue>> scale);
 		FTransform transformFromVec(FVector rotation, FVector position, FVector scale);
 
-		template<typename T>
-		void findAllActors(UWorld* World, TArray<T*>& Out);
-
-		template<typename T>
-		void findAllObjects(TArray<T*>& OutArray);
+		void findAllActors(UWorld* World, TArray<AActor*>& Out); 
 
 		TSharedPtr<FJsonObject> JsonParsed;
 		bool writeFile(FString SaveDirectory, FString FileName, FString SaveText, bool AllowOverWriting = true);
