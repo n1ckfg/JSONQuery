@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "XMLrwExample.h"
+#include "XMLexample.h"
 
-AXMLrwExample::AXMLrwExample()
+AXMLexample::AXMLexample()
 {
 	static ConstructorHelpers::FObjectFinder<UBlueprint> finder_BP_TestSphere(TEXT("Blueprint'/JSONQuery/Examples/Blueprints/BP_TestSphere.BP_TestSphere'"));
 	BP_TestSphere = findBlueprint(finder_BP_TestSphere);
@@ -11,7 +11,7 @@ AXMLrwExample::AXMLrwExample()
 	UE_LOG(LogTemp, Warning, TEXT("%s"), *XmlDoc);
 }
 
-void AXMLrwExample::BeginPlay()
+void AXMLexample::BeginPlay()
 {
 	Super::BeginPlay();
 

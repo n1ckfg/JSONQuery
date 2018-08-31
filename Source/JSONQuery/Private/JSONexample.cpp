@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "JSONrwExample.h"
+#include "JSONexample.h"
 
 // Sets default values
-AJSONrwExample::AJSONrwExample()
+AJSONexample::AJSONexample()
 {
 	static ConstructorHelpers::FObjectFinder<UBlueprint> finder_BP_TestCube(TEXT("Blueprint'/JSONQuery/Examples/Blueprints/BP_TestCube.BP_TestCube'"));
 	BP_TestCube = findBlueprint(finder_BP_TestCube);
@@ -15,7 +15,7 @@ AJSONrwExample::AJSONrwExample()
 }
 
 // Called when the game starts or when spawned
-void AJSONrwExample::BeginPlay()
+void AJSONexample::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -45,7 +45,7 @@ void AJSONrwExample::BeginPlay()
 	*/
 }
 
-bool AJSONrwExample::writeJson(FString SaveDirectory, FString FileName)
+bool AJSONexample::writeJson(FString SaveDirectory, FString FileName)
 {
 	TArray<FString> output;
 	output.Add("{");
@@ -100,7 +100,7 @@ bool AJSONrwExample::writeJson(FString SaveDirectory, FString FileName)
 }
 
 
-FExampleObj AJSONrwExample::createObject(TSharedPtr<FJsonObject> jsonNode)
+FExampleObj AJSONexample::createObject(TSharedPtr<FJsonObject> jsonNode)
 {
 	FExampleObj newObject = FExampleObj();
 

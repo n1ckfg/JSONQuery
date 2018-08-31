@@ -4,15 +4,15 @@
 
 #include "JSONrwCore.h"
 
-#include "XMLrwExample.generated.h"
+#include "XMLexample.generated.h"
 
 UCLASS()
-class JSONQUERY_API AXMLrwExample : public AJSONrwCore
+class JSONQUERY_API AXMLexample : public AJSONrwCore
 {
 	GENERATED_BODY()
 
 	public:
-		AXMLrwExample();
+		AXMLexample();
 		
 		pugi::xml_document XmlDoc;
 

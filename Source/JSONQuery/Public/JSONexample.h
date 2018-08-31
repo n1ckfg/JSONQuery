@@ -4,7 +4,7 @@
 
 #include "JSONrwCore.h"
 
-#include "JSONrwExample.generated.h"
+#include "JSONexample.generated.h"
 
 USTRUCT()
 struct FExampleObj 
@@ -28,12 +28,12 @@ struct FExampleObj
 };
 
 UCLASS()
-class JSONQUERY_API AJSONrwExample : public AJSONrwCore
+class JSONQUERY_API AJSONexample : public AJSONrwCore
 {
 	GENERATED_BODY()
 	
 	public:	
-		AJSONrwExample();
+		AJSONexample();
 
 		TSharedPtr<FJsonObject> JsonParsed;
 
