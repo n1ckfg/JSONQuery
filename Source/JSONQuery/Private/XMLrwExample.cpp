@@ -2,10 +2,11 @@
 
 #include "XMLrwExample.h"
 
-XMLrwExample::XMLrwExample()
+AXMLrwExample::AXMLrwExample()
 {
 }
 
-XMLrwExample::~XMLrwExample()
+void AXMLrwExample::BeginPlay()
 {
+	Super::BeginPlay();
 }

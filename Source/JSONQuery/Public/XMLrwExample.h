@@ -2,14 +2,18 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "JSONrwCore.h"
 
-/**
- * 
- */
-class JSONQUERY_API XMLrwExample
+#include "XMLrwExample.generated.h"
+
+UCLASS()
+class JSONQUERY_API AXMLrwExample : public AJSONrwCore
 {
-public:
-	XMLrwExample();
-	~XMLrwExample();
+	GENERATED_BODY()
+
+	public:
+		AXMLrwExample();
+
+	protected:
+		virtual void BeginPlay() override;
 };
