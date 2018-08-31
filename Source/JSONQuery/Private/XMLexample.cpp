@@ -10,20 +10,25 @@ AXMLexample::AXMLexample()
 	static ConstructorHelpers::FObjectFinder<UBlueprint> finder_BP_TestSphere(TEXT("Blueprint'/JSONQuery/Examples/Blueprints/BP_TestSphere.BP_TestSphere'"));
 	BP_TestSphere = findBlueprint(finder_BP_TestSphere);
 
-	loadXml(url, XmlDoc);
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *XmlDoc);
+	loadXml(url, XmlData);
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *XmlData);
 }
 
 void AXMLexample::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	parseXml(XmlData);
+}
 
+void AXMLexample::parseXml(pugi::xml_document &xml)
+{
 	float pos_scaler = 500.0;
 	FVector pos_offset = FVector(0, 0, 500);
 
 	float bp_scaler = 0.2;
 
-	pugi::xml_node xmlMotionCapture = XmlDoc.child("MotionCapture");
+	pugi::xml_node xmlMotionCapture = xml.child("MotionCapture");
 
 	for (pugi::xml_node xmlFrame = xmlMotionCapture.first_child(); xmlFrame; xmlFrame = xmlFrame.next_sibling())
 	{

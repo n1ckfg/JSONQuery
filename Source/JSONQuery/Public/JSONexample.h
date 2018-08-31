@@ -35,10 +35,11 @@ class JSONQUERY_API AJSONexample : public AJSONrwCore
 	public:	
 		AJSONexample();
 
-		TSharedPtr<FJsonObject> JsonParsed;
+		TSharedPtr<FJsonObject> JsonData;
 
 		FExampleObj createObject(TSharedPtr<FJsonObject> jsonNode);
 		TArray<FExampleObj> objects;
+		void parseJson(TSharedPtr<FJsonObject> json);
 		bool writeJson(FString SaveDirectory, FString FileName);
 
 		FString url = "Plugins/JSONQuery/Content/Examples/Json/input.json";

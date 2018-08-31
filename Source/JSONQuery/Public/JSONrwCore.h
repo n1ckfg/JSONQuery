@@ -26,7 +26,7 @@ class JSONQUERY_API AJSONrwCore : public AActor
 		FTransform transformFromJson(TArray<TSharedPtr<FJsonValue>> position, TArray<TSharedPtr<FJsonValue>> rotation, TArray<TSharedPtr<FJsonValue>> scale);
 
 		// xml
-		bool loadXml(FString url, pugi::xml_document& XmlDoc);
+		bool loadXml(FString url, pugi::xml_document& XmlData);
 
 	protected:
 		virtual void BeginPlay() override;

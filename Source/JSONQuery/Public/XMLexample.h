@@ -14,7 +14,9 @@ class JSONQUERY_API AXMLexample : public AJSONrwCore
 	public:
 		AXMLexample();
 		
-		pugi::xml_document XmlDoc;
+		pugi::xml_document XmlData;
+
+		void parseXml(pugi::xml_document &xml);
 
 		FString url = "Plugins/JSONQuery/Content/Examples/Xml/input.xml";
 

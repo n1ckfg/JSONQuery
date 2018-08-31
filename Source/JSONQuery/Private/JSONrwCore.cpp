@@ -13,7 +13,7 @@ void AJSONrwCore::BeginPlay()
 
 TSharedPtr<FJsonObject> AJSONrwCore::loadJson(FString url)
 {
-	TSharedPtr<FJsonObject> JsonParsed;
+	TSharedPtr<FJsonObject> JsonData;
 
 	url = FPaths::ConvertRelativePathToFull(FPaths::ProjectDir()) + url;
 
@@ -25,7 +25,7 @@ TSharedPtr<FJsonObject> AJSONrwCore::loadJson(FString url)
 
 	TSharedRef<TJsonReader<TCHAR>> JsonReader = TJsonReaderFactory<TCHAR>::Create(JsonRaw);
 
-	if (FJsonSerializer::Deserialize(JsonReader, JsonParsed)) {
+	if (FJsonSerializer::Deserialize(JsonReader, JsonData)) {
 		UE_LOG(JSONQueryLog, Warning, TEXT("Deserialized JSON."));
 	}
 	else
@@ -33,13 +33,13 @@ TSharedPtr<FJsonObject> AJSONrwCore::loadJson(FString url)
 		UE_LOG(JSONQueryLog, Error, TEXT("Error trying to deserialize JSON."));
 	}
 
-	return JsonParsed;
+	return JsonData;
 }
 
-bool AJSONrwCore::loadXml(FString url, pugi::xml_document& XmlDoc)
+bool AJSONrwCore::loadXml(FString url, pugi::xml_document& XmlData)
 {
 	url = FPaths::ConvertRelativePathToFull(FPaths::ProjectDir()) + url;
-	pugi::xml_parse_result res = XmlDoc.load_file(toString(url).c_str());
+	pugi::xml_parse_result res = XmlData.load_file(toString(url).c_str());
 	if (!res)
 	{
 		return false;

@@ -11,7 +11,7 @@ AJSONexample::AJSONexample()
 	static ConstructorHelpers::FObjectFinder<UBlueprint> finder_BP_TestSphere(TEXT("Blueprint'/JSONQuery/Examples/Blueprints/BP_TestSphere.BP_TestSphere'"));
 	BP_TestSphere = findBlueprint(finder_BP_TestSphere);
 
-	JsonParsed = loadJson(url);
+	JsonData = loadJson(url);
 }
 
 // Called when the game starts or when spawned
@@ -19,7 +19,12 @@ void AJSONexample::BeginPlay()
 {
 	Super::BeginPlay();
 
-	TArray<TSharedPtr<FJsonValue>> jsonNodes = JsonParsed->GetArrayField("objects");
+	parseJson(JsonData);
+}
+
+void AJSONexample::parseJson(TSharedPtr<FJsonObject> json) 
+{
+	TArray<TSharedPtr<FJsonValue>> jsonNodes = json->GetArrayField("objects");
 
 	if (jsonNodes.Num() > 0)
 	{
@@ -35,15 +40,16 @@ void AJSONexample::BeginPlay()
 
 	/*
 	// more JSON examples:
-	TArray<TSharedPtr<FJsonValue>> exArray = JsonParsed->GetArrayField("ExampleArray");
+	TArray<TSharedPtr<FJsonValue>> exArray = JsonData->GetArrayField("ExampleArray");
 	TSharedPtr<FJsonObject> exArrayMember = exArray[0]->AsObject();
-	int exI = JsonParsed->GetIntegerField("ExampleInt");
-	bool exB = JsonParsed->GetBoolField("ExampleBool");
-	FString exS = JsonParsed->GetStringField("ExampleString");
-	float exF = JsonParsed->GetNumberField("ExampleFloat");
-	double exD = JsonParsed->GetNumberField("ExampleDouble");
+	int exI = JsonData->GetIntegerField("ExampleInt");
+	bool exB = JsonData->GetBoolField("ExampleBool");
+	FString exS = JsonData->GetStringField("ExampleString");
+	float exF = JsonData->GetNumberField("ExampleFloat");
+	double exD = JsonData->GetNumberField("ExampleDouble");
 	*/
 }
+
 
 bool AJSONexample::writeJson(FString SaveDirectory, FString FileName)
 {
