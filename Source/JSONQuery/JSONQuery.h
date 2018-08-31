@@ -10,6 +10,7 @@
 #include "Runtime/Engine/Classes/Kismet/KismetMathLibrary.h"
 #include "Http.h"
 #include "Json.h"
+#include "pugixml.hpp"
 
 //#include <stdio.h>
 //#include <iostream>

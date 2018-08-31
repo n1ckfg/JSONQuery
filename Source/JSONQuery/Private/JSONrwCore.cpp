@@ -2,16 +2,21 @@
 
 AJSONrwCore::AJSONrwCore()
 {
-	//
+	//PrimaryActorTick.bCanEverTick = true;
 }
 
 void AJSONrwCore::BeginPlay()
 { 
 	Super::BeginPlay(); 
+	//SetActorTickEnabled(true);
+}
 
-	UE_LOG(JSONQueryLog, Warning, TEXT("Begin loading JSON."));
+TSharedPtr<FJsonObject> AJSONrwCore::loadJson(FString url)
+{
+	TSharedPtr<FJsonObject> JsonParsed;
 
-	FString url = FPaths::ConvertRelativePathToFull(FPaths::ProjectDir()) + "Plugins/JSONQuery/Content/Examples/Json/input.json";
+	url = FPaths::ConvertRelativePathToFull(FPaths::ProjectDir()) + url;
+
 	UE_LOG(JSONQueryLog, Warning, TEXT("Loading File %s"), *url);
 
 	FString JsonRaw;
@@ -27,6 +32,27 @@ void AJSONrwCore::BeginPlay()
 	{
 		UE_LOG(JSONQueryLog, Error, TEXT("Error trying to deserialize JSON."));
 	}
+
+	return JsonParsed;
+}
+
+bool AJSONrwCore::loadXml(FString url, pugi::xml_document& XmlDoc)
+{
+	url = FPaths::ConvertRelativePathToFull(FPaths::ProjectDir()) + url;
+	pugi::xml_parse_result res = XmlDoc.load_file(toString(url).c_str());
+	if (!res)
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}
+
+std::string AJSONrwCore::toString(FString s)
+{
+	return std::string(TCHAR_TO_UTF8(*s));
 }
 
 UClass* AJSONrwCore::findBlueprint(ConstructorHelpers::FObjectFinder<UBlueprint> finder)
@@ -103,3 +129,11 @@ bool AJSONrwCore::writeFile(FString SaveDirectory, FString FileName, FString Sav
 
 	return FFileHelper::SaveStringToFile(SaveText, *SaveDirectory);
 }
+		
+AActor* AJSONrwCore::Instantiate(TSubclassOf<class AActor> bp, FTransform transform)
+{
+	AActor *returns = GetWorld()->SpawnActor(bp);
+	returns->SetActorTransform(transform);
+	return returns;
+}
+

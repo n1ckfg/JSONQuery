@@ -35,14 +35,15 @@ class JSONQUERY_API AJSONrwExample : public AJSONrwCore
 	public:	
 		AJSONrwExample();
 
+		TSharedPtr<FJsonObject> JsonParsed;
+
 		FExampleObj createObject(TSharedPtr<FJsonObject> jsonNode);
 		TArray<FExampleObj> objects;
 		bool writeJson(FString SaveDirectory, FString FileName);
 
-		TSubclassOf<class AActor> BP_TestCube, BP_TestSphere;
+		FString url = "Plugins/JSONQuery/Content/Examples/Json/input.json";
 
-		void loadMesh(FString MeshName);
-		UStaticMeshComponent *Mesh;
+		TSubclassOf<class AActor> BP_TestCube, BP_TestSphere;
 
 	protected:
 		virtual void BeginPlay() override;

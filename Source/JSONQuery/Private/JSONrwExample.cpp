@@ -10,6 +10,8 @@ AJSONrwExample::AJSONrwExample()
 
 	static ConstructorHelpers::FObjectFinder<UBlueprint> finder_BP_TestSphere(TEXT("Blueprint'/JSONQuery/Examples/Blueprints/BP_TestSphere.BP_TestSphere'"));
 	BP_TestSphere = findBlueprint(finder_BP_TestSphere);
+
+	JsonParsed = loadJson(url);
 }
 
 // Called when the game starts or when spawned
@@ -102,26 +104,24 @@ FExampleObj AJSONrwExample::createObject(TSharedPtr<FJsonObject> jsonNode)
 {
 	FExampleObj newObject = FExampleObj();
 
-	newObject.type = jsonNode->GetStringField("type");
-	if (newObject.type == "cube")
-	{
-		newObject.bp = GetWorld()->SpawnActor(BP_TestCube);
-	}
-	else if (newObject.type == "sphere")
-	{
-		newObject.bp = GetWorld()->SpawnActor(BP_TestSphere);
-	}
 	newObject.position = vecFromJson(jsonNode->GetArrayField("position"));
 	newObject.rotation = vecFromJson(jsonNode->GetArrayField("rotation"));
 	newObject.scale = vecFromJson(jsonNode->GetArrayField("scale"));
-
 	FTransform transform = transformFromVec(newObject.rotation, newObject.position, newObject.scale);
-	newObject.bp->SetActorTransform(transform);
+
+	newObject.type = jsonNode->GetStringField("type");
+	if (newObject.type == "cube")
+	{
+		newObject.bp = Instantiate(BP_TestCube, transform);
+	}
+	else if (newObject.type == "sphere")
+	{
+		newObject.bp = Instantiate(BP_TestSphere, transform);
+	}
 
 	UE_LOG(JSONQueryLog, Warning, TEXT("FOUND TYPE: %s"), *newObject.type);
 
 	return newObject;
 }
-
 
 

@@ -13,6 +13,12 @@ class JSONQUERY_API AXMLrwExample : public AJSONrwCore
 
 	public:
 		AXMLrwExample();
+		
+		pugi::xml_document XmlDoc;
+
+		FString url = "Plugins/JSONQuery/Content/Examples/Xml/input.xml";
+
+		TSubclassOf<class AActor> BP_TestSphere;
 
 	protected:
 		virtual void BeginPlay() override;
