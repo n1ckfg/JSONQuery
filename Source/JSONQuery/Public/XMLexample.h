@@ -18,7 +18,7 @@ class JSONQUERY_API AXMLexample : public AJSONrwCore
 
 		FString url = "Plugins/JSONQuery/Content/Examples/Xml/input.xml";
 
-		TSubclassOf<class AActor> BP_TestSphere;
+		TSubclassOf<class AActor> BP_TestCube, BP_TestSphere;
 
 	protected:
 		virtual void BeginPlay() override;

@@ -4,6 +4,9 @@
 
 AXMLexample::AXMLexample()
 {
+	static ConstructorHelpers::FObjectFinder<UBlueprint> finder_BP_TestCube(TEXT("Blueprint'/JSONQuery/Examples/Blueprints/BP_TestCube.BP_TestCube'"));
+	BP_TestCube = findBlueprint(finder_BP_TestCube);
+
 	static ConstructorHelpers::FObjectFinder<UBlueprint> finder_BP_TestSphere(TEXT("Blueprint'/JSONQuery/Examples/Blueprints/BP_TestSphere.BP_TestSphere'"));
 	BP_TestSphere = findBlueprint(finder_BP_TestSphere);
 
@@ -15,23 +18,35 @@ void AXMLexample::BeginPlay()
 {
 	Super::BeginPlay();
 
-	float scaler = 1000.0;
+	float pos_scaler = 500.0;
+	FVector pos_offset = FVector(0, 0, 500);
+
+	float bp_scaler = 0.2;
 
 	pugi::xml_node xmlMotionCapture = XmlDoc.child("MotionCapture");
 
-	for (pugi::xml_node xmlFrame = xmlMotionCapture.child("MocapFrame"); xmlFrame; xmlFrame = xmlFrame.next_sibling("MocapFrame"))
+	for (pugi::xml_node xmlFrame = xmlMotionCapture.first_child(); xmlFrame; xmlFrame = xmlFrame.next_sibling())
 	{
 		pugi::xml_node xmlJoints = xmlFrame.child("Skeleton").child("Joints");
 
-		pugi::xml_node xmlHead = xmlJoints.child("head");
+		for (pugi::xml_node xmlJoint = xmlJoints.first_child(); xmlJoint; xmlJoint = xmlJoint.next_sibling())
+		{
+			float x = xmlJoint.attribute("x").as_float() * pos_scaler;
+			float y = xmlJoint.attribute("y").as_float() * pos_scaler;
+			float z = xmlJoint.attribute("z").as_float() * pos_scaler;
 
-		float x = xmlHead.attribute("x").as_float() * scaler;
-		float y = xmlHead.attribute("y").as_float() * scaler;
-		float z = xmlHead.attribute("z").as_float() * scaler;
+			FVector p = FVector(-x, z, -y) + pos_offset;
 
-		FVector p = FVector(x, y, z);
-
-		Instantiate(BP_TestSphere, transformFromVec(FVector(0, 0, 0), p, FVector(1, 1, 1)));
+			if (FString() + xmlJoint.name() == "head")
+			{
+				Instantiate(BP_TestCube, transformFromVec(FVector(0, 0, 0), p, FVector(bp_scaler, bp_scaler, bp_scaler)));
+			}
+			else
+			{
+				Instantiate(BP_TestSphere, transformFromVec(FVector(0, 0, 0), p, FVector(bp_scaler, bp_scaler, bp_scaler)));
+			}
+		}
+		break; // stop after one frame
 	}
 
 }
