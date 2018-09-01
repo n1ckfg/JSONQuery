@@ -2,17 +2,17 @@
 
 #pragma once
 
-#include "JSONrwCore.h"
+#include "RwCore.h"
 
-#include "XMLexample.generated.h"
+#include "XMLExample.generated.h"
 
 UCLASS()
-class JSONQUERY_API AXMLexample : public AJSONrwCore
+class JSONQUERY_API AXMLExample : public ARwCore
 {
 	GENERATED_BODY()
 
 	public:
-		AXMLexample();
+		AXMLExample();
 		
 		pugi::xml_document XmlData;
 

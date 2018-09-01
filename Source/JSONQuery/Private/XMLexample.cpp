@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "XMLexample.h"
+#include "XMLExample.h"
 
-AXMLexample::AXMLexample()
+AXMLExample::AXMLExample()
 {
 	static ConstructorHelpers::FObjectFinder<UBlueprint> finder_BP_TestCube(TEXT("Blueprint'/JSONQuery/Examples/Blueprints/BP_TestCube.BP_TestCube'"));
 	BP_TestCube = findBlueprint(finder_BP_TestCube);
@@ -14,14 +14,14 @@ AXMLexample::AXMLexample()
 	UE_LOG(LogTemp, Warning, TEXT("%s"), *XmlData);
 }
 
-void AXMLexample::BeginPlay()
+void AXMLExample::BeginPlay()
 {
 	Super::BeginPlay();
 	
 	parseXml(XmlData);
 }
 
-void AXMLexample::parseXml(pugi::xml_document &xml)
+void AXMLExample::parseXml(pugi::xml_document &xml)
 {
 	float pos_scaler = 500.0;
 	FVector pos_offset = FVector(0, 0, 500);

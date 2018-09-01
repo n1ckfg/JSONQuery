@@ -1,17 +1,17 @@
-#include "JSONrwCore.h"
+#include "RwCore.h"
 
-AJSONrwCore::AJSONrwCore()
+ARwCore::ARwCore()
 {
 	//PrimaryActorTick.bCanEverTick = true;
 }
 
-void AJSONrwCore::BeginPlay()
+void ARwCore::BeginPlay()
 { 
 	Super::BeginPlay(); 
 	//SetActorTickEnabled(true);
 }
 
-TSharedPtr<FJsonObject> AJSONrwCore::loadJson(FString url)
+TSharedPtr<FJsonObject> ARwCore::loadJson(FString url)
 {
 	TSharedPtr<FJsonObject> JsonData;
 
@@ -36,7 +36,7 @@ TSharedPtr<FJsonObject> AJSONrwCore::loadJson(FString url)
 	return JsonData;
 }
 
-bool AJSONrwCore::loadXml(FString url, pugi::xml_document& XmlData)
+bool ARwCore::loadXml(FString url, pugi::xml_document& XmlData)
 {
 	url = FPaths::ConvertRelativePathToFull(FPaths::ProjectDir()) + url;
 	pugi::xml_parse_result res = XmlData.load_file(toString(url).c_str());
@@ -50,19 +50,19 @@ bool AJSONrwCore::loadXml(FString url, pugi::xml_document& XmlData)
 	}
 }
 
-std::string AJSONrwCore::toString(FString s)
+std::string ARwCore::toString(FString s)
 {
 	return std::string(TCHAR_TO_UTF8(*s));
 }
 
-UClass* AJSONrwCore::findBlueprint(ConstructorHelpers::FObjectFinder<UBlueprint> finder)
+UClass* ARwCore::findBlueprint(ConstructorHelpers::FObjectFinder<UBlueprint> finder)
 {
 	FString url = finder.Object->GetPathName();
 	UE_LOG(JSONQueryLog, Warning, TEXT("Found Blueprint at url: %s"), *url);
 	return (UClass*)finder.Object->GeneratedClass;
 }
 
-FVector AJSONrwCore::vecFromJson(TArray<TSharedPtr<FJsonValue>> jsonNode)
+FVector ARwCore::vecFromJson(TArray<TSharedPtr<FJsonValue>> jsonNode)
 {	
 	float x = jsonNode[0]->AsNumber();
 	float y = jsonNode[1]->AsNumber();
@@ -70,18 +70,18 @@ FVector AJSONrwCore::vecFromJson(TArray<TSharedPtr<FJsonValue>> jsonNode)
 	return FVector(x, y, z);
 }
 
-FTransform AJSONrwCore::transformFromJson(TArray<TSharedPtr<FJsonValue>> rotation, TArray<TSharedPtr<FJsonValue>> position, TArray<TSharedPtr<FJsonValue>> scale)
+FTransform ARwCore::transformFromJson(TArray<TSharedPtr<FJsonValue>> rotation, TArray<TSharedPtr<FJsonValue>> position, TArray<TSharedPtr<FJsonValue>> scale)
 {
 	FVector rot = vecFromJson(rotation);
 	return FTransform(UKismetMathLibrary::MakeRotator(rot.X, rot.Y, rot.Z), vecFromJson(position), vecFromJson(scale));
 }
 
-FTransform AJSONrwCore::transformFromVec(FVector rotation, FVector position, FVector scale)
+FTransform ARwCore::transformFromVec(FVector rotation, FVector position, FVector scale)
 {
 	return FTransform(UKismetMathLibrary::MakeRotator(rotation.X, rotation.Y, rotation.Z), position, scale);
 }
 
-void AJSONrwCore::findAllActors(UWorld* World, TArray<AActor*>& Out)
+void ARwCore::findAllActors(UWorld* World, TArray<AActor*>& Out)
 {
 	for (TActorIterator<AActor> It(World, AActor::StaticClass()); It; ++It) 
 	{
@@ -93,7 +93,7 @@ void AJSONrwCore::findAllActors(UWorld* World, TArray<AActor*>& Out)
 	}
 }
 
-bool AJSONrwCore::writeFile(FString SaveDirectory, FString FileName, FString SaveText, bool AllowOverWriting)
+bool ARwCore::writeFile(FString SaveDirectory, FString FileName, FString SaveText, bool AllowOverWriting)
 {
 	IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
 
@@ -130,7 +130,7 @@ bool AJSONrwCore::writeFile(FString SaveDirectory, FString FileName, FString Sav
 	return FFileHelper::SaveStringToFile(SaveText, *SaveDirectory);
 }
 		
-AActor* AJSONrwCore::Instantiate(TSubclassOf<class AActor> bp, FTransform transform)
+AActor* ARwCore::Instantiate(TSubclassOf<class AActor> bp, FTransform transform)
 {
 	AActor *returns = GetWorld()->SpawnActor(bp);
 	returns->SetActorTransform(transform);

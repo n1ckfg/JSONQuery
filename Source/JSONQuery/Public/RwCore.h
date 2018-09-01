@@ -2,15 +2,15 @@
 
 #include "JSONQuery.h"
 
-#include "JSONrwCore.generated.h"
+#include "RwCore.generated.h"
 
 UCLASS()
-class JSONQUERY_API AJSONrwCore : public AActor 
+class JSONQUERY_API ARwCore : public AActor 
 {
 	GENERATED_BODY()
 
 	public:
-		AJSONrwCore();
+		ARwCore();
 
 		// utilities
 		UClass* findBlueprint(ConstructorHelpers::FObjectFinder<UBlueprint> finder);

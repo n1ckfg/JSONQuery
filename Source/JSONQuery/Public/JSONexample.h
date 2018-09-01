@@ -2,9 +2,9 @@
 
 #pragma once
 
-#include "JSONrwCore.h"
+#include "RwCore.h"
 
-#include "JSONexample.generated.h"
+#include "JSONExample.generated.h"
 
 USTRUCT()
 struct FExampleObj 
@@ -28,12 +28,12 @@ struct FExampleObj
 };
 
 UCLASS()
-class JSONQUERY_API AJSONexample : public AJSONrwCore
+class JSONQUERY_API AJSONExample : public ARwCore
 {
 	GENERATED_BODY()
 	
 	public:	
-		AJSONexample();
+		AJSONExample();
 
 		TSharedPtr<FJsonObject> JsonData;
 
